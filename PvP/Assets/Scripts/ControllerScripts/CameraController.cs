@@ -7,9 +7,11 @@ public class CameraController : MonoBehaviour
     public float speed = 0.2f;
     private const String horizontal = "Horizontal";
     private const String vertical = "Vertical";
+    private Vector3 originalPos;
+
     void Start()
     {
-
+        originalPos = transform.position;
     }
 
     // Update is called once per frame
@@ -17,6 +19,9 @@ public class CameraController : MonoBehaviour
     {
         var vec = new Vector3(Input.GetAxis(horizontal), Input.GetAxis(vertical));
         this.transform.Translate(vec * speed);
-      
+        if(Input.GetKeyDown(KeyCode.Backspace))
+        {
+            transform.position = originalPos;
+        }
     }
 }

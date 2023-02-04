@@ -17,10 +17,13 @@ public class BattleUnit : MonoBehaviour
     public Team Team;
     public SpriteRenderer SpriteRenderer;
     public GameObject BulletPrefab;
+    public GameObject HighlightObject;
 
     public Int32 Cooldown;
     public Int32 MaxCooldown;
     private Boolean shotBullet;
+    private Vector3 currentDestination;
+    private Boolean onMove;
 
     public event EventHandler<DeathEventArgs> DestroyedEvent;
 
@@ -33,6 +36,8 @@ public class BattleUnit : MonoBehaviour
         MaxSpeed = CurrentSpeed = speed;
         MaxCooldown = Cooldown = 10;
         SpawnerBuildingId = buildingId;
+        currentDestination = transform.position;
+        onMove = false;
     }
 
     public void ShootBullet(Transform target)
@@ -63,32 +68,34 @@ public class BattleUnit : MonoBehaviour
             }
         }
     }
-
     void Update()
     {
-        if (Team == Team.Team1)
+        if (!onMove) return;
+        
+        Vector3 pos = transform.position;
+        Vector3 direction = currentDestination - transform.position;
+
+        if (direction.magnitude < 1)
         {
-            Vector3 pos = transform.position;
-
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                pos.y += 4 * Time.deltaTime;
-            }
-            if (Input.GetKey(KeyCode.DownArrow))
-            {
-                pos.y -= 4 * Time.deltaTime;
-            }
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                pos.x += 4 * Time.deltaTime;
-            }
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                pos.x -= 4 * Time.deltaTime;
-            }
-
-            transform.position = pos;
+            onMove = false;
+            return;
         }
+
+        direction.Normalize();
+
+        transform.position += direction * Time.deltaTime;
+        transform.rotation = Quaternion.identity;
+    }
+
+    public void ToggleHighlight()
+    {
+        HighlightObject.SetActive(!HighlightObject.activeSelf);
+    }
+
+    public void SetDestination(Vector3 vector)
+    {
+        currentDestination = vector;
+        onMove = true;
     }
 
     private void OnDestroy()

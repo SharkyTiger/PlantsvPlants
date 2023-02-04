@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
@@ -39,6 +40,8 @@ public class BuildingsManager : MonoBehaviour
         highlight.SetActive(true);
         toBeBuild = kind;
     }
+
+    public Boolean IsInBuildMode() => toBeBuild != BuildingKind.None;
 
     private void Cancel()
     {

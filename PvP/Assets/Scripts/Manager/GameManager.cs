@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     private Int32[] FertilizerMineCost = {0,100};
     private Int32 currentSpawnerId = -1;
     private Vector3[] spawnPositions = {new Vector3(30,30,-1), new Vector3(30, -30, -1), new Vector3(-30, 30, -1), new Vector3(-30, -30, -1) };
+    private GameObject selectedUnit;
 
     // Start is called before the first frame update
     void Start()
@@ -67,6 +68,7 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("VictoryScene");
         }
+        CheckUnitSelection();
     }
 
     public void SpawnEnemyWave(Int32 numberOfEnemies, Int32 numberOfCorners = 1)
@@ -117,20 +119,14 @@ public class GameManager : MonoBehaviour
         {
             return null;
         }
-        Debug.Log(hitData.collider.gameObject.name);
         GameObject hitObject = hitData.transform.gameObject;
-        hitObject.TryGetComponent<BattleUnit>(out var unitData);
-        if (unitData != null)
-        {
-
-        }
 
         if (!hitObject.tag.ToLower().Equals("ignorebyraycast"))
         {
             return hitObject;
         }
 
-        return null; //TODO
+        return null;
     }
 
     public void DestroyBuilding(BuildingKind buildingKind, GameObject building)
@@ -311,5 +307,44 @@ public class GameManager : MonoBehaviour
                 Team4BattleUnits.Remove(args.BattleUnit);
                 break;
         }
+    }
+
+    private void CheckUnitSelection()
+    {
+        if (buildingsManager.IsInBuildMode() || !Input.GetMouseButtonDown(0)) return;
+
+        var pos = (Vector3)GetMouseToWorldPos();
+
+        var hitData = Physics2D.Raycast(pos, Vector2.zero);
+
+        if (hitData.transform == null)
+        {
+            if(selectedUnit != null)
+            {
+                selectedUnit.GetComponent<BattleUnit>().SetDestination(pos);
+                selectedUnit.GetComponent<BattleUnit>().ToggleHighlight();
+                selectedUnit = null;
+            }
+
+            return;
+        }
+        GameObject hitObject = hitData.transform.gameObject;
+
+        if (selectedUnit != null)
+        {
+            selectedUnit.GetComponent<BattleUnit>().ToggleHighlight();
+            selectedUnit = null;
+        }
+
+        var battleUnit = hitObject.GetComponent<BattleUnit>();
+        if ( battleUnit == null)
+        {
+            return;
+        }
+
+        selectedUnit = hitObject;
+        battleUnit.ToggleHighlight();
+
+        return;
     }
 }
