@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Spawner : Building
 {
+    public Spawner(BuildingKind kind) : base(kind)
+    {
+    }
+
     // Start is called before the first frame update
     void Start()
     {

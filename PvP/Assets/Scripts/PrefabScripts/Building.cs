@@ -9,6 +9,12 @@ public class Building : MonoBehaviour
     public Int32 Health;
     public Int32 MaxHealth;
     public Int32 Level;
+    public BuildingKind Kind;
+    public Building(BuildingKind kind)
+    {
+        Kind = kind;
+    }
+
     void Start()
     {
         
@@ -19,4 +25,10 @@ public class Building : MonoBehaviour
     {
         
     }
+}
+public enum BuildingKind
+{
+    Spawner,
+    WaterMine,
+    FertilizerMine
 }
