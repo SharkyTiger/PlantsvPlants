@@ -81,6 +81,7 @@ public class BuildingsManager : MonoBehaviour
             b.Manager = gameManager;
             b.TeamNumber = Team.Team1;
             b.TeamColor = Color.red;
+            b.MaxHealth = b.CurrentHealth = 10;
             gameManager.CreateBuilding(building);
             toBeBuild = BuildingKind.None;
         }

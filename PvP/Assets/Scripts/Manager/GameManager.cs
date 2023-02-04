@@ -1,13 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.Tilemaps;
-using static UnityEngine.GraphicsBuffer;
 using System.Linq;
 using UnityEngine.SceneManagement;
-using static UnityEngine.EventSystems.EventTrigger;
 using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 
@@ -35,6 +31,8 @@ public class GameManager : MonoBehaviour
     private Int32[] FertilizerMineCost = {0,100};
     private Int32 currentSpawnerId = -1;
     private Vector3[] spawnPositions = {new Vector3(30,30,-1), new Vector3(30, -30, -1), new Vector3(-30, 30, -1), new Vector3(-30, -30, -1) };
+    private Int32 survivedWaves = 0;
+    private TimeSpan timeUntilNextWave; 
     private GameObject selectedUnit;
 
     // Start is called before the first frame update
@@ -45,10 +43,10 @@ public class GameManager : MonoBehaviour
 
         mainBuilding = Instantiate(MainBuildingPrefab, new Vector3(-2, 0, -1), Quaternion.identity);
         mainBuilding.GetComponent<MainBuilding>().SetValues(Team.Team1, Color.magenta, 20);
-
+        timeUntilNextWave = new TimeSpan(100);
         //Testcode
-        SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red, -1);
-        SpawnBattleUnit(new Vector3(10, -5, -1), Team.Team2, Color.blue, -1);
+        SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red, -1, new Vector3(-10, 0, -1));
+        SpawnBattleUnit(new Vector3(10, -5, -1), Team.Team2, Color.blue, -1, new Vector3(10, -5, -1));
     }
 
     // Update is called once per frame
@@ -61,6 +59,10 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             SpawnEnemyWave(10, 1);
+        }
+        if (timeUntilNextWave == TimeSpan.Zero)
+        {
+            SpawnEnemyWave(10 * survivedWaves+1, Math.Max(Math.Min(survivedWaves / 4, 1), 4));
         }
         ShootBulletsTeam1();
         ShootBulletsTeam2();
@@ -76,7 +78,7 @@ public class GameManager : MonoBehaviour
         for(var i = 0; i < numberOfEnemies; i++)
         {
             var selectedPostion = Random.Range(1, numberOfCorners);
-            SpawnBattleUnit(spawnPositions[selectedPostion], Team.Team2, Color.blue, -1);
+            SpawnBattleUnit(spawnPositions[selectedPostion-1], Team.Team2, Color.blue, -1, mainBuilding.transform.position);
         }
     }
 
@@ -142,7 +144,14 @@ public class GameManager : MonoBehaviour
                     ressourceManager.DestroyFertilizerMine();
                     break;
                 case BuildingKind.Spawner:
-                    //TODO: kill units with ID
+                    var spawnerId = building.GetComponent<Spawner>().Id;
+                    foreach(var unit in Team1BattleUnits)
+                    {
+                        if(unit.GetComponent<BattleUnit>().SpawnerBuildingId == spawnerId)
+                        {
+                            Destroy(unit);
+                        }
+                    }
                     break;
             }
 
@@ -176,11 +185,15 @@ public class GameManager : MonoBehaviour
         ressourceManager.DeductRessourceCost(cost[0], cost[1]);
     }
 
-    public void SpawnBattleUnit(Vector3 position, Team team, Color color, Int32 spawnerId)
+    public void SpawnBattleUnit(Vector3 position, Team team, Color color, Int32 spawnerId, Vector3 moveToPosition)
     {
         var unit = Instantiate(BattleunitPrefab, position, Quaternion.identity);
         var script = unit.GetComponent<BattleUnit>();
         script.Spawn(team, color, 5, 1, 1f, spawnerId);
+        if(position != moveToPosition)
+        {
+            script.SetDestination(moveToPosition);
+        }
         script.DestroyedEvent += RemoveBattleUnitOnDestroy;
         switch (team)
         {
@@ -268,7 +281,7 @@ public class GameManager : MonoBehaviour
                 unit.GetComponent<BattleUnit>()?.ShootBullet(mainBuilding.transform);
                 break;
             }
-            if (!buildings.Any())
+            if (buildings.Any())
             {
                 foreach (var enemy in buildings)
                 {

@@ -17,7 +17,6 @@ public class Building : DamageableBuilding
     public Building(BuildingKind kind)
     {
         Kind = kind; 
-        MaxHealth = CurrentHealth = 10;
         Team = Team.Team1;
     }
 

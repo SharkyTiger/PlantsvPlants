@@ -25,7 +25,7 @@ public class Spawner : Building
             var test = this.transform.position;
             test.x -=  2;
             test.z = -1;
-            Manager.SpawnBattleUnit(test, TeamNumber, TeamColor, Id);
+            Manager.SpawnBattleUnit(test, TeamNumber, TeamColor, Id, test);
         }
     }
 }
