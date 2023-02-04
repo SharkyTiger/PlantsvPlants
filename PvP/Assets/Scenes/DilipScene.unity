@@ -2360,7 +2360,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1871616833}
-  - component: {fileID: 1871616832}
+  - component: {fileID: 1871616834}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2368,19 +2368,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1871616832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1871616831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a05bd49c55ca440d82cc6b6695df358, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StartWithBuildingMode: 0
 --- !u!4 &1871616833
 Transform:
   m_ObjectHideFlags: 0
@@ -2396,6 +2383,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1871616834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871616831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a05bd49c55ca440d82cc6b6695df358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartWithBuildingMode: 0
+  BattleunitPrefab: {fileID: 3092155696279319955, guid: b949ca32fd7632741a0414953003ba3d, type: 3}
+  Team1BattleUnits: []
+  Team2BattleUnits: []
+  Team3BattleUnits: []
+  Team4BattleUnits: []
 --- !u!1 &2006135376
 GameObject:
   m_ObjectHideFlags: 0
