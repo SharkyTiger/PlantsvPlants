@@ -9,27 +9,10 @@ public class UIManager : MonoBehaviour
     public GameObject ClosedShopParent;
     public GameObject OpenShopParent;
 
-    private Int32 waterCount;
-    private Int32 fertilizerCount;
-
     // Start is called before the first frame update
     void Start()
     {
-        waterCount = 250;
-        fertilizerCount = 250;
-        SetCountTexts();
-    }
-
-    public void AddToWater(int add)
-    {
-        waterCount += add;
-        WaterCountText.text = $"W - {waterCount}";
-    }
-
-    public void AddToFertilizer(int add)
-    {
-        fertilizerCount += add;
-        FertilizerCountText.text = $"F - {fertilizerCount}";
+        SetCountTexts(0, 0);
     }
 
     public void ToggleShop()
@@ -38,9 +21,9 @@ public class UIManager : MonoBehaviour
         OpenShopParent.SetActive(!OpenShopParent.activeSelf);
     }
 
-    private void SetCountTexts()
+    public void SetCountTexts(int water, int fertilizer)
     {
-        WaterCountText.text = $"W - {waterCount}";
-        FertilizerCountText.text = $"F - {fertilizerCount}";
+        WaterCountText.text = $"W - {water}";
+        FertilizerCountText.text = $"F - {fertilizer}";
     }
 }
