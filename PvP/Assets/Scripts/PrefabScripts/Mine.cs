@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Mine : Building
 {
+    public Mine(BuildingKind kind) : base(kind)
+    {
+    }
+
     // Start is called before the first frame update
     void Start()
     {
