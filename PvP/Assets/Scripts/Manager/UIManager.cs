@@ -1,14 +1,13 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class UIManager : MonoBehaviour
 {
     public TextMeshProUGUI WaterCountText;
     public TextMeshProUGUI FertilizerCountText;
-    public Button ShopToggle;
+    public GameObject ClosedShopParent;
+    public GameObject OpenShopParent;
 
     private Int32 waterCount;
     private Int32 fertilizerCount;
@@ -19,12 +18,6 @@ public class UIManager : MonoBehaviour
         waterCount = 250;
         fertilizerCount = 250;
         SetCountTexts();
-        ShopToggle.onClick.AddListener(OnShopToggle);
-    }
-
-    void OnDestroy()
-    {
-        
     }
 
     public void AddToWater(int add)
@@ -39,15 +32,15 @@ public class UIManager : MonoBehaviour
         FertilizerCountText.text = $"F - {fertilizerCount}";
     }
 
+    public void ToggleShop()
+    {
+        ClosedShopParent.SetActive(!ClosedShopParent.activeSelf);
+        OpenShopParent.SetActive(!OpenShopParent.activeSelf);
+    }
+
     private void SetCountTexts()
     {
         WaterCountText.text = $"W - {waterCount}";
         FertilizerCountText.text = $"F - {fertilizerCount}";
-    }
-
-    private void OnShopToggle()
-    {
-        AddToWater(Random.Range(-5, 6));
-        AddToFertilizer(Random.Range(-5, 6));
     }
 }
