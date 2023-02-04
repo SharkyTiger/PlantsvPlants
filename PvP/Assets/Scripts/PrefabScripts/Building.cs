@@ -28,6 +28,7 @@ public class Building : MonoBehaviour
 }
 public enum BuildingKind
 {
+    None,
     Spawner,
     WaterMine,
     FertilizerMine
