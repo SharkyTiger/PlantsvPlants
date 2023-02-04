@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
@@ -9,6 +10,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     public GameObject PrefabLeft;
     public GameObject PrefabRight;
+    public Tilemap map;
     // This script will simply instantiate the Prefab when the game starts.
     void Start()
     {
@@ -17,22 +19,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // get mouse click's position in 2d plane
-        Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        pz.z = 0;
-
-        // convert mouse click's position to Grid position
-        GridLayout gridLayout = transform.parent.GetComponentInParent<GridLayout>();
-        Vector3Int cellPosition = gridLayout.WorldToCell(pz);
-
-        // set selectedUnit to clicked location on grid
-        Debug.Log(cellPosition);
-
         if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Mouse1))
         {
-            var vec3 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            vec3.z = 0;
-            var currentObject = GetGameObjectFromPosition(vec3);
+            Vector3 vec3 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            vec3.z = 1;
+            var cellPosition = map.LocalToCell(vec3);
+            Debug.Log(cellPosition);
+
+            var currentObject = GetGameObjectFromPosition(cellPosition);
             if (currentObject != null)
             {
                 return;
