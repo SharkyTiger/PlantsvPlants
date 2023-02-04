@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float Lifetime = 3000f;
+    public float Lifetime = 300f;
 
     public SpriteRenderer SpriteRenderer;
 
@@ -16,7 +16,6 @@ public class Bullet : MonoBehaviour
     private void Awake()
     {
         Destroy(gameObject, Lifetime);
-
     }
 
     public void SetValues(Team team, Color color, Int32 damageValue)
@@ -24,15 +23,5 @@ public class Bullet : MonoBehaviour
         SpriteRenderer.color = color;
         Team = team;
         DamageValue = damageValue;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Destructable"))
-        {
-            //TODO: Damage am gegner machen
-            //Destroy(gameObject);
-            Destroy(gameObject);
-        }
     }
 }

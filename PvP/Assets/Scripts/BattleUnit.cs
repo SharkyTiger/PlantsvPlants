@@ -21,6 +21,8 @@ public class BattleUnit : MonoBehaviour
     public Int32 MaxCooldown;
     private Boolean shotBullet;
 
+    public event EventHandler<DeathEventArgs> DestroyedEvent;
+
     public void Spawn(Team team, Color color, Int32 health, Int32 damageValue, float speed)
     {
         Team = team;
@@ -36,7 +38,7 @@ public class BattleUnit : MonoBehaviour
         shotBullet = true;
         var bullet = Instantiate(BulletPrefab, this.transform.position, this.transform.rotation);
         bullet.GetComponent<Bullet>().SetValues(Team, SpriteRenderer.color, CurrentDamageValue);
-        bullet.GetComponent<Rigidbody2D>().AddRelativeForce(target.transform.position.normalized * 0.02f, ForceMode2D.Force);
+        bullet.GetComponent<Rigidbody2D>().AddForce(target.transform.position.normalized * 0.02f, ForceMode2D.Impulse);
 
     }
 
@@ -81,15 +83,32 @@ public class BattleUnit : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        DestroyedEvent.Invoke(this, new DeathEventArgs(Team, this.gameObject));
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Damage") && collision.gameObject.GetComponent<Bullet>().Team != Team)
+        if (collision.gameObject.CompareTag("Damage") && collision.gameObject.GetComponent<Bullet>()?.Team != Team)
         {
-            CurrentHealth--;
+            CurrentHealth-= collision.gameObject.GetComponent<Bullet>().DamageValue;
+            Destroy(collision.gameObject);
             if(CurrentHealth <= 0)
             {
                 Destroy(gameObject);
             }
+        }
+    }
+
+    public class DeathEventArgs : EventArgs {
+        public Team Team;
+        public GameObject BattleUnit;
+
+        public DeathEventArgs(Team team, GameObject battleUnit)
+        {
+            Team = team;
+            BattleUnit = battleUnit;
         }
     }
 }
