@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - UIManager
+  - RessourceManager
   layers:
   - Default
   - TransparentFX
