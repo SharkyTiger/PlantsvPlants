@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Tilemaps;
 using static UnityEngine.GraphicsBuffer;
+using System.Linq;
+using UnityEngine.SceneManagement;
+
 public class GameManager : MonoBehaviour
 {
     public Boolean StartWithBuildingMode;
@@ -43,6 +46,10 @@ public class GameManager : MonoBehaviour
     {
         ShootBulletsTeam1();
         ShootBulletsTeam2();
+        if (!Team2BattleUnits.Any())
+        {
+            SceneManager.LoadScene("VictoryScene");
+        }
     }
 
     public Vector3Int GetMouseToWorldPos()
