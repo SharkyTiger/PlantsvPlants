@@ -21,9 +21,10 @@ public class BattleUnit : MonoBehaviour
     public Int32 MaxCooldown;
     private Boolean shotBullet;
 
-    public void Spawn(Team team, Int32 health, Int32 damageValue, float speed)
+    public void Spawn(Team team, Color color, Int32 health, Int32 damageValue, float speed)
     {
         Team = team;
+        SpriteRenderer.color = color;
         MaxHealth = CurrentHealth = health;
         MaxDamageValue = CurrentDamageValue = damageValue;
         MaxSpeed = CurrentSpeed = speed;

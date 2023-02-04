@@ -1,11 +1,18 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
+
+using static UnityEngine.GraphicsBuffer;
 
 public class GameManager : MonoBehaviour
 {
     public Boolean StartWithBuildingMode;
+    public GameObject BattleunitPrefab;
+    public List<GameObject> Team1BattleUnits;
+    public List<GameObject> Team2BattleUnits;
+    public List<GameObject> Team3BattleUnits;
+    public List<GameObject> Team4BattleUnits;
 
     private RessourceManager ressourceManager;
 
@@ -16,8 +23,12 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ressourceManager = GameObject.FindGameObjectWithTag("RessourceManager").GetComponent<RessourceManager>();
+        ressourceManager = GameObject.FindGameObjectWithTag("RessourceManager")?.GetComponent<RessourceManager>();
         isBuildingMode = StartWithBuildingMode;
+
+        //Testcode
+        SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red);
+        SpawnBattleUnit(new Vector3(0, -5, -1), Team.Team2, Color.blue);
     }
 
     // Update is called once per frame
@@ -48,5 +59,26 @@ public class GameManager : MonoBehaviour
     public void SetBuildingMode(Boolean isBuilding)
     {
         isBuildingMode = isBuilding;
+    }
+
+    public void SpawnBattleUnit(Vector3 position, Team team, Color color)
+    {
+        var unit = Instantiate(BattleunitPrefab, position, Quaternion.identity);
+        unit.GetComponent<BattleUnit>().Spawn(team, color, 5, 1, 1f);
+        switch(team)
+        {
+            case Team.Team1:
+                Team1BattleUnits.Add(unit);
+                break;
+            case Team.Team2:
+                Team2BattleUnits.Add(unit);
+                break;
+            case Team.Team3:
+                Team3BattleUnits.Add(unit);
+                break;
+            case Team.Team4:
+                Team4BattleUnits.Add(unit);
+                break;
+        }
     }
 }
