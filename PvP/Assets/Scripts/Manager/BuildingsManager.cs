@@ -71,6 +71,10 @@ public class BuildingsManager : MonoBehaviour
 
         if(building != null)
         {
+            var b = building.GetComponent<Building>();
+            b.Manager = gameManager;
+            b.TeamNumber = Team.Team1;
+            b.TeamColor = Color.red;
             gameManager.CreateBuilding(building);
             toBeBuild = BuildingKind.None;
         }

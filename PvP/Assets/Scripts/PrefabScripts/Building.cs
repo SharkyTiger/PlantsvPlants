@@ -8,7 +8,11 @@ public class Building : MonoBehaviour
     // Start is called before the first frame update
     public Int32 Health;
     public Int32 MaxHealth;
+    public Int32 Cooldown;
     public BuildingKind Kind;
+    public Team TeamNumber;
+    public Color TeamColor;
+    public GameManager Manager;
     public Building(BuildingKind kind)
     {
         Kind = kind;
