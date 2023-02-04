@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     private Int32[] SpawnerCost = {100,100};
     private Int32[] WaterMineCost = {100,0};
     private Int32[] FertilizerMineCost = {0,100};
+    private Int32 currentSpawnerId = -1;
 
     // Start is called before the first frame update
     void Start()
@@ -68,6 +69,12 @@ public class GameManager : MonoBehaviour
     {
         if (!ressourceManager.HasEnough(FertilizerMineCost[0], FertilizerMineCost[1])) return;
         buildingsManager.EnterBuildMode(BuildingKind.FertilizerMine);
+    }
+
+    public Int32 GetNextSpawnerId()
+    {
+        currentSpawnerId++;
+        return currentSpawnerId;
     }
 
     public GameObject GetGameObjectFromPosition(Vector3 position)

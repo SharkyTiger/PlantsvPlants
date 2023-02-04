@@ -4,6 +4,7 @@ using UnityEngine;
 public class Spawner : Building
 {
     Int32 Tick;
+    public Int32 Id;
     public Spawner(BuildingKind kind) : base(kind)
     {
     }

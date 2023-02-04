@@ -60,6 +60,7 @@ public class BuildingsManager : MonoBehaviour
         {
             case BuildingKind.Spawner:
                 building = Instantiate(SpawnerPrefab, cellPosition, Quaternion.identity);
+                building.GetComponent<Spawner>().Id = gameManager.GetNextSpawnerId();
                 break;
             case BuildingKind.WaterMine:
                 building = Instantiate(WaterMinePrefab, cellPosition, Quaternion.identity);
