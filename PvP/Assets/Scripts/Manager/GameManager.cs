@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Tilemaps;
 using static UnityEngine.GraphicsBuffer;
+using UnityEditor.SceneManagement;
+
 public class GameManager : MonoBehaviour
 {
     public Boolean StartWithBuildingMode;
@@ -79,16 +81,24 @@ public class GameManager : MonoBehaviour
 
     public GameObject GetGameObjectFromPosition(Vector3 position)
     {
-        /*GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
-        foreach (var obj in allObjects)
+        var hitData = Physics2D.Raycast(position, Vector2.zero);
+        if (hitData.collider == null)
         {
-            float dist = Vector3.Distance(position, obj.transform.position);
-            if (dist < 1 && obj != highlight)
-            {
-                return obj;
-            }
+            return null;
         }
-        return null;*/
+        Debug.Log(hitData.collider.gameObject.name);
+        GameObject hitObject = hitData.transform.gameObject;
+        hitObject.TryGetComponent<BattleUnit>(out var unitData);
+        if (unitData != null)
+        {
+
+        }
+
+        if (!hitObject.tag.ToLower().Equals("ignorebyraycast"))
+        {
+            return hitObject;
+        }
+
         return null; //TODO
     }
 
