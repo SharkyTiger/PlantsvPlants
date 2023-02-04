@@ -12,6 +12,7 @@ public class BattleUnit : MonoBehaviour
     public float MaxSpeed = 1;
     public Int32 CurrentDamageValue;
     public Int32 MaxDamageValue = 1;
+    public Int32 SpawnerBuildingId { get; private set; }
 
     public Team Team;
     public SpriteRenderer SpriteRenderer;
@@ -23,22 +24,30 @@ public class BattleUnit : MonoBehaviour
 
     public event EventHandler<DeathEventArgs> DestroyedEvent;
 
-    public void Spawn(Team team, Color color, Int32 health, Int32 damageValue, float speed)
+    public void Spawn(Team team, Color color, Int32 health, Int32 damageValue, float speed, Int32 buildingId)
     {
         Team = team;
         SpriteRenderer.color = color;
         MaxHealth = CurrentHealth = health;
         MaxDamageValue = CurrentDamageValue = damageValue;
         MaxSpeed = CurrentSpeed = speed;
-        MaxCooldown = Cooldown = 5;
+        MaxCooldown = Cooldown = 10;
+        SpawnerBuildingId = buildingId;
     }
 
     public void ShootBullet(Transform target)
     {
+        if (shotBullet)
+        {
+            return;
+        }
         shotBullet = true;
-        var bullet = Instantiate(BulletPrefab, this.transform.position, this.transform.rotation);
+        Vector3 direction = (Vector3)target.position - this.transform.position;
+        direction.Normalize();
+        var bullet = Instantiate(BulletPrefab, this.transform.position + direction, this.transform.rotation);
+
         bullet.GetComponent<Bullet>().SetValues(Team, SpriteRenderer.color, CurrentDamageValue);
-        bullet.GetComponent<Rigidbody2D>().AddForce(target.transform.position.normalized * 0.02f, ForceMode2D.Impulse);
+        bullet.GetComponent<Rigidbody2D>().AddForce(direction * 1000f);
 
     }
 
@@ -46,7 +55,6 @@ public class BattleUnit : MonoBehaviour
     {
         if (shotBullet)
         {
-            Debug.Log("Cooldown");
             Cooldown--;
             if(Cooldown <= 0)
             {

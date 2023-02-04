@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
     public void SpawnBattleUnit(Vector3 position, Team team, Color color)
     {
         var unit = Instantiate(BattleunitPrefab, position, Quaternion.identity);
-        unit.GetComponent<BattleUnit>().Spawn(team, color, 5, 1, 1f);
+        unit.GetComponent<BattleUnit>().Spawn(team, color, 5, 1, 1f, -1);
         unit.GetComponent<BattleUnit>().DestroyedEvent += RemoveBattleUnitOnDestroy;
         switch (team)
         {
