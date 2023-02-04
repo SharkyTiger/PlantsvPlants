@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
@@ -30,6 +31,11 @@ public class PlayerController : MonoBehaviour
         highlight.transform.position = cellPosition;
         if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Mouse1))
         {
+            if(EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+
             Debug.Log(cellPosition);
 
             var currentObject = GetGameObjectFromPosition(cellPosition);
