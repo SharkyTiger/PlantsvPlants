@@ -29,7 +29,9 @@ public class BuildingsManager : MonoBehaviour
 
         var cellPosition = gameManager.GetMouseToWorldPos();
         highlight.transform.position = cellPosition;
-        
+
+        if (Input.GetMouseButton(0)) MouseDown(cellPosition);
+        if (Input.GetMouseButton(1)) Cancel();
     }
 
     public void EnterBuildMode(BuildingKind kind)
@@ -37,12 +39,14 @@ public class BuildingsManager : MonoBehaviour
         toBeBuild = kind;
     }
 
-    private void OnMouseDown()
+    private void Cancel()
     {
-        Debug.Log("Hallo");
-        if (toBeBuild == BuildingKind.None || EventSystem.current.IsPointerOverGameObject()) return;
+        toBeBuild = BuildingKind.None;
+    }
 
-        var cellPosition = gameManager.GetMouseToWorldPos();
+    private void MouseDown(Vector3Int cellPosition)
+    {
+        if ( EventSystem.current.IsPointerOverGameObject()) return;
 
         var currentObject = gameManager.GetGameObjectFromPosition(cellPosition);
         if (currentObject != null)
@@ -67,6 +71,7 @@ public class BuildingsManager : MonoBehaviour
 
         if(building != null)
         {
+            Debug.Log("TBB:" + toBeBuild + building.GetComponent<Building>().Kind);
             gameManager.CreateBuilding(building);
             toBeBuild = BuildingKind.None;
         }

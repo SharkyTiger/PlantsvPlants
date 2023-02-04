@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     public void SetCountTexts(int water, int fertilizer)
     {
-        WaterCountText.text = $"W - {water}";
-        FertilizerCountText.text = $"F - {fertilizer}";
+        WaterCountText.text = $"W : {water}";
+        FertilizerCountText.text = $"F : {fertilizer}";
     }
 }

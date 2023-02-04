@@ -19,16 +19,13 @@ public class GameManager : MonoBehaviour
     private RessourceManager ressourceManager;
     private BuildingsManager buildingsManager;
 
-    private List<GameObject> buildings;
-
-    private Boolean isBuildingMode;
+    private List<GameObject> buildings = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
     {
         ressourceManager = RessourceManagerObject.GetComponent<RessourceManager>();
         buildingsManager = BuildingsManagerObject.GetComponent<BuildingsManager>();
-        isBuildingMode = StartWithBuildingMode;
 
         //Testcode
         SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red);
@@ -51,19 +48,16 @@ public class GameManager : MonoBehaviour
 
     public void CreateSpawner()
     {
-        isBuildingMode = true;
         buildingsManager.EnterBuildMode(BuildingKind.Spawner);
     }
 
     public void CreateWaterMine()
     {
-        isBuildingMode = true;
         buildingsManager.EnterBuildMode(BuildingKind.WaterMine);
     }
 
     public void CreateFertilizerMine()
     {
-        isBuildingMode = true;
         buildingsManager.EnterBuildMode(BuildingKind.FertilizerMine);
     }
 
@@ -96,16 +90,10 @@ public class GameManager : MonoBehaviour
     public void CreateBuilding(GameObject building)
     {
         buildings.Add(building);
-        var buildingsKind = building.GetComponent<Building>().Kind;
+        var buildingsKind = building.GetComponent<Building>()?.Kind;
+        Debug.Log(buildingsKind);
         if (buildingsKind == BuildingKind.WaterMine) ressourceManager.AddWaterMine();
         if (buildingsKind == BuildingKind.FertilizerMine) ressourceManager.AddFertilizerMine();
-    }
-
-    public Boolean IsBuildingMode() => isBuildingMode;
-
-    public void SetBuildingMode(Boolean isBuilding)
-    {
-        isBuildingMode = isBuilding;
     }
 
     public void SpawnBattleUnit(Vector3 position, Team team, Color color)

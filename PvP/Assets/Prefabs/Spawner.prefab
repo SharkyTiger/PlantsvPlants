@@ -100,4 +100,4 @@ MonoBehaviour:
   Health: 0
   MaxHealth: 100
   Level: 0
-  Kind: 0
+  Kind: 1
