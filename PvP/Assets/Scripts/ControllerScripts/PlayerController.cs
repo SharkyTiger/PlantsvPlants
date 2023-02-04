@@ -17,26 +17,35 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // get mouse click's position in 2d plane
+        Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        pz.z = 0;
+
+        // convert mouse click's position to Grid position
+        GridLayout gridLayout = transform.parent.GetComponentInParent<GridLayout>();
+        Vector3Int cellPosition = gridLayout.WorldToCell(pz);
+
+        // set selectedUnit to clicked location on grid
+        Debug.Log(cellPosition);
+
         if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Mouse1))
         {
             var vec3 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            vec3.x = (Int32)vec3.x;
-            vec3.y = (Int32)vec3.y;
-            vec3.z = 1;
-            var deadObject = GetGameObjectFromPosition(vec3);
-            if (deadObject != null)
+            vec3.z = 0;
+            var currentObject = GetGameObjectFromPosition(vec3);
+            if (currentObject != null)
             {
-                Destroy(deadObject);
+                return;
             }
             if (Input.GetKeyDown(KeyCode.Mouse0)) 
             {
-                Instantiate(PrefabLeft, vec3, Quaternion.identity);
+                Instantiate(PrefabLeft, cellPosition, Quaternion.identity);
                 return;
             }
 
             if(Input.GetKeyDown(KeyCode.Mouse1))
             {
-                Instantiate(PrefabRight, vec3, Quaternion.identity);
+                Instantiate(PrefabRight, cellPosition, Quaternion.identity);
                 return;
             }
         }   
