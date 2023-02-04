@@ -7,6 +7,8 @@ using UnityEngine.Tilemaps;
 using static UnityEngine.GraphicsBuffer;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using static UnityEngine.EventSystems.EventTrigger;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +20,8 @@ public class GameManager : MonoBehaviour
     public List<GameObject> Team4BattleUnits;
     public GameObject BuildingsManagerObject;
     public GameObject RessourceManagerObject;
+    public GameObject MainBuildingPrefab;
+    private GameObject mainBuilding;
     public Tilemap map;
 
     private RessourceManager ressourceManager;
@@ -36,9 +40,11 @@ public class GameManager : MonoBehaviour
         ressourceManager = RessourceManagerObject?.GetComponent<RessourceManager>();
         buildingsManager = BuildingsManagerObject?.GetComponent<BuildingsManager>();
 
+        mainBuilding = Instantiate(MainBuildingPrefab, new Vector3(-2, 0, -1), Quaternion.identity);
+
         //Testcode
         SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red, -1);
-        SpawnBattleUnit(new Vector3(0, -5, -1), Team.Team2, Color.blue, -1);
+        SpawnBattleUnit(new Vector3(10, -5, -1), Team.Team2, Color.blue, -1);
     }
 
     // Update is called once per frame
@@ -228,6 +234,12 @@ public class GameManager : MonoBehaviour
                     unit.GetComponent<BattleUnit>()?.ShootBullet(enemy.transform);
                     break;
                 }
+            }
+            
+            if (!mainBuilding.IsUnityNull() && triggerDistance >= Vector3.Distance(unit.transform.position, mainBuilding.transform.position))
+            {
+                unit.GetComponent<BattleUnit>()?.ShootBullet(mainBuilding.transform);
+                break;
             }
         }
     }

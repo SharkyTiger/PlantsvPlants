@@ -2399,6 +2399,7 @@ MonoBehaviour:
   Team4BattleUnits: []
   BuildingsManagerObject: {fileID: 463871202}
   RessourceManagerObject: {fileID: 1162750747}
+  MainBuildingPrefab: {fileID: 4586210466337702991, guid: 6247f0091efdec044833fd87b9e9345b, type: 3}
   map: {fileID: 721221313}
 --- !u!1 &2006135376
 GameObject:
