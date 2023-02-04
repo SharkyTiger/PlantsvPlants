@@ -21,11 +21,15 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> buildings = new List<GameObject>();
 
+    private Int32[] SpawnerCost = {100,100};
+    private Int32[] WaterMineCost = {100,0};
+    private Int32[] FertilizerMineCost = {0,100};
+
     // Start is called before the first frame update
     void Start()
     {
-        ressourceManager = RessourceManagerObject.GetComponent<RessourceManager>();
-        buildingsManager = BuildingsManagerObject.GetComponent<BuildingsManager>();
+        ressourceManager = RessourceManagerObject?.GetComponent<RessourceManager>();
+        buildingsManager = BuildingsManagerObject?.GetComponent<BuildingsManager>();
 
         //Testcode
         SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red);
@@ -48,16 +52,19 @@ public class GameManager : MonoBehaviour
 
     public void CreateSpawner()
     {
+        if (!ressourceManager.HasEnough(SpawnerCost[0], SpawnerCost[1])) return;
         buildingsManager.EnterBuildMode(BuildingKind.Spawner);
     }
 
     public void CreateWaterMine()
     {
+        if (!ressourceManager.HasEnough(WaterMineCost[0], WaterMineCost[1])) return;
         buildingsManager.EnterBuildMode(BuildingKind.WaterMine);
     }
 
     public void CreateFertilizerMine()
     {
+        if (!ressourceManager.HasEnough(FertilizerMineCost[0], FertilizerMineCost[1])) return;
         buildingsManager.EnterBuildMode(BuildingKind.FertilizerMine);
     }
 
@@ -89,11 +96,27 @@ public class GameManager : MonoBehaviour
 
     public void CreateBuilding(GameObject building)
     {
+        if (building == null) return;
+
         buildings.Add(building);
-        var buildingsKind = building.GetComponent<Building>()?.Kind;
-        Debug.Log(buildingsKind);
-        if (buildingsKind == BuildingKind.WaterMine) ressourceManager.AddWaterMine();
-        if (buildingsKind == BuildingKind.FertilizerMine) ressourceManager.AddFertilizerMine();
+        var buildingScript = building.GetComponent<Building>();
+        var kind = buildingScript.Kind;
+        var cost = new Int32[] { 0, 0 };
+        switch (kind)
+        {
+            case BuildingKind.Spawner:
+                cost = SpawnerCost;
+                break;
+            case BuildingKind.WaterMine:
+                ressourceManager.AddWaterMine();
+                cost = WaterMineCost;
+                break;
+            case BuildingKind.FertilizerMine:
+                ressourceManager.AddFertilizerMine();
+                cost = FertilizerMineCost;
+                break;
+        }
+        ressourceManager.DeductRessourceCost(cost[0], cost[1]);
     }
 
     public void SpawnBattleUnit(Vector3 position, Team team, Color color)

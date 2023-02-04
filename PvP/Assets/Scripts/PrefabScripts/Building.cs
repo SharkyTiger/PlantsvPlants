@@ -8,7 +8,6 @@ public class Building : MonoBehaviour
     // Start is called before the first frame update
     public Int32 Health;
     public Int32 MaxHealth;
-    public Int32 Level;
     public BuildingKind Kind;
     public Building(BuildingKind kind)
     {

@@ -71,7 +71,6 @@ public class BuildingsManager : MonoBehaviour
 
         if(building != null)
         {
-            Debug.Log("TBB:" + toBeBuild + building.GetComponent<Building>().Kind);
             gameManager.CreateBuilding(building);
             toBeBuild = BuildingKind.None;
         }

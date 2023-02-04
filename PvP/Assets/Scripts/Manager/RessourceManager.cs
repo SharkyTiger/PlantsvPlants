@@ -47,6 +47,11 @@ public class RessourceManager : MonoBehaviour
         UpdateRessourceUI();
     }
 
+    public Boolean HasEnough(Int32 waterCost, Int32 fertilizerCost)
+    {
+        return waterCost <= waterCount && fertilizerCost <= fertilizerCount;
+    }
+
     public void AddWaterMine()
     {
         numberWaterMine++;
