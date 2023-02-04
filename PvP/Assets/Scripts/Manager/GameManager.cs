@@ -34,8 +34,8 @@ public class GameManager : MonoBehaviour
         buildingsManager = BuildingsManagerObject?.GetComponent<BuildingsManager>();
 
         //Testcode
-        SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red);
-        SpawnBattleUnit(new Vector3(0, -5, -1), Team.Team2, Color.blue);
+        SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red, -1);
+        SpawnBattleUnit(new Vector3(0, -5, -1), Team.Team2, Color.blue, -1);
     }
 
     // Update is called once per frame
@@ -92,14 +92,14 @@ public class GameManager : MonoBehaviour
         return null; //TODO
     }
 
-    public void DestroyBuilding(GameObject building) //TODO Buildings Klasse
+    public void DestroyBuilding(GameObject building)
     {
         if(buildings.Contains(building))
         {
             buildings.Remove(building);
             var script = building.GetComponent<Building>();
-            if (true) ressourceManager.DestroyWaterMine();//TODO Wassermine Klasse
-            if (true) ressourceManager.DestroyFertilizerMine();//TODO Düngermine Klasse
+            if (true) ressourceManager.DestroyWaterMine();
+            if (true) ressourceManager.DestroyFertilizerMine();
         }
     }
 
@@ -128,11 +128,12 @@ public class GameManager : MonoBehaviour
         ressourceManager.DeductRessourceCost(cost[0], cost[1]);
     }
 
-    public void SpawnBattleUnit(Vector3 position, Team team, Color color)
+    public void SpawnBattleUnit(Vector3 position, Team team, Color color, Int32 spawnerId)
     {
         var unit = Instantiate(BattleunitPrefab, position, Quaternion.identity);
-        unit.GetComponent<BattleUnit>().Spawn(team, color, 5, 1, 1f, -1);
-        unit.GetComponent<BattleUnit>().DestroyedEvent += RemoveBattleUnitOnDestroy;
+        var script = unit.GetComponent<BattleUnit>();
+        script.Spawn(team, color, 5, 1, 1f, spawnerId);
+        script.DestroyedEvent += RemoveBattleUnitOnDestroy;
         switch (team)
         {
             case Team.Team1:

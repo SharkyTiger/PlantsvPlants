@@ -36,11 +36,13 @@ public class BuildingsManager : MonoBehaviour
 
     public void EnterBuildMode(BuildingKind kind)
     {
+        highlight.SetActive(true);
         toBeBuild = kind;
     }
 
     private void Cancel()
     {
+        highlight.SetActive(false);
         toBeBuild = BuildingKind.None;
     }
 
