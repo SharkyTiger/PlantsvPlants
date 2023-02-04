@@ -9,7 +9,7 @@ public abstract class DamageableBuilding : MonoBehaviour
     public Int32 MaxHealth;
     public Team Team;
 
-    protected abstract void OnDestruction();
+    protected abstract void OnBeforeDestruction();
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -19,7 +19,7 @@ public abstract class DamageableBuilding : MonoBehaviour
             Destroy(collision.gameObject);
             if (CurrentHealth <= 0)
             {
-                OnDestruction();
+                OnBeforeDestruction();
                 Destroy(gameObject);
             }
         }

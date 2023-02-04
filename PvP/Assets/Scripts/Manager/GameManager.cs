@@ -9,6 +9,7 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using static UnityEngine.EventSystems.EventTrigger;
 using Unity.VisualScripting;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
     private Int32[] WaterMineCost = {100,0};
     private Int32[] FertilizerMineCost = {0,100};
     private Int32 currentSpawnerId = -1;
+    private Vector3[] spawnPositions = {new Vector3(30,30,-1), new Vector3(30, -30, -1), new Vector3(-30, 30, -1), new Vector3(-30, -30, -1) };
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +43,7 @@ public class GameManager : MonoBehaviour
         buildingsManager = BuildingsManagerObject?.GetComponent<BuildingsManager>();
 
         mainBuilding = Instantiate(MainBuildingPrefab, new Vector3(-2, 0, -1), Quaternion.identity);
+        mainBuilding.GetComponent<MainBuilding>().SetValues(Team.Team1, Color.magenta, 20);
 
         //Testcode
         SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red, -1);
@@ -50,11 +53,28 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SpawnEnemyWave(10, 1);
+        }
         ShootBulletsTeam1();
         ShootBulletsTeam2();
         if (!Team2BattleUnits.Any())
         {
             SceneManager.LoadScene("VictoryScene");
+        }
+    }
+
+    public void SpawnEnemyWave(Int32 numberOfEnemies, Int32 numberOfCorners = 1)
+    {
+        for(var i = 0; i < numberOfEnemies; i++)
+        {
+            var selectedPostion = Random.Range(1, numberOfCorners);
+            SpawnBattleUnit(spawnPositions[selectedPostion], Team.Team2, Color.blue, -1);
         }
     }
 
@@ -113,14 +133,24 @@ public class GameManager : MonoBehaviour
         return null; //TODO
     }
 
-    public void DestroyBuilding(GameObject building)
+    public void DestroyBuilding(BuildingKind buildingKind, GameObject building)
     {
         if(buildings.Contains(building))
         {
+            switch (buildingKind)
+            {
+                case BuildingKind.WaterMine:
+                    ressourceManager.DestroyWaterMine();
+                    break;
+                case BuildingKind.FertilizerMine:
+                    ressourceManager.DestroyFertilizerMine();
+                    break;
+                case BuildingKind.Spawner:
+                    //TODO: kill units with ID
+                    break;
+            }
+
             buildings.Remove(building);
-            var script = building.GetComponent<Building>();
-            if (true) ressourceManager.DestroyWaterMine();
-            if (true) ressourceManager.DestroyFertilizerMine();
         }
     }
 
@@ -131,6 +161,7 @@ public class GameManager : MonoBehaviour
         buildings.Add(building);
         var buildingScript = building.GetComponent<Building>();
         var kind = buildingScript.Kind;
+        buildingScript.DestroyedEvent += RemoveBuildingsOnDestruction;
         var cost = new Int32[] { 0, 0 };
         switch (kind)
         {
@@ -241,6 +272,25 @@ public class GameManager : MonoBehaviour
                 unit.GetComponent<BattleUnit>()?.ShootBullet(mainBuilding.transform);
                 break;
             }
+            if (!buildings.Any())
+            {
+                foreach (var enemy in buildings)
+                {
+                    if (triggerDistance >= Vector3.Distance(unit.transform.position, enemy.transform.position))
+                    {
+                        unit.GetComponent<BattleUnit>()?.ShootBullet(enemy.transform);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void RemoveBuildingsOnDestruction(object sender, Building.DestructionEventArgs args)
+    {
+        if(args.Team == Team.Team1)
+        {
+            DestroyBuilding(args.BuildingKind, args.Building);
         }
     }
 

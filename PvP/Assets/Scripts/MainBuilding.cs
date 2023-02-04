@@ -15,7 +15,7 @@ public class MainBuilding : DamageableBuilding
         MaxHealth = CurrentHealth = maxHealth;
     }
 
-    protected override void OnDestruction()
+    protected override void OnBeforeDestruction()
     {
         SceneManager.LoadScene("GameOverScene");
     }
