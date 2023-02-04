@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
             var vec3 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             vec3.x = (Int32)vec3.x;
             vec3.y = (Int32)vec3.y;
-            vec3.z = 0;
+            vec3.z = 1;
             var deadObject = GetGameObjectFromPosition(vec3);
             if (deadObject != null)
             {
