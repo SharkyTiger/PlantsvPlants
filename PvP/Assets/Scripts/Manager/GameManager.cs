@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         mainBuilding.GetComponent<MainBuilding>().SetValues(Team.Team1, Color.magenta, 20);
         timeUntilNextWave = startTimeUntilWave;
         //Testcode
-        SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red, -1, new Vector3(-10, 0, -1));
+        //SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red, -1, new Vector3(-10, 0, -1));
         SpawnBattleUnit(new Vector3(12, -5, -1), Team.Team2, Color.blue, -1, new Vector3(12, -5, -1));
     }
 
