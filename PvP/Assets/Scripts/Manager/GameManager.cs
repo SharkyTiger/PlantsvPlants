@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public GameObject BuildingsManagerObject;
     public GameObject RessourceManagerObject;
     public GameObject MainBuildingPrefab;
+    public GameObject SelectionMarker;
     private GameObject mainBuilding;
     public Tilemap map;
 
@@ -34,6 +35,16 @@ public class GameManager : MonoBehaviour
     private Int32 currentSpawnerId = -1;
     private Vector3[] spawnPositions = { new Vector3(30, 30, -1), new Vector3(30, -30, -1), new Vector3(-30, 30, -1), new Vector3(-30, -30, -1) };
     private Int32 survivedWaves = 0;
+    private Boolean isSelectionMode = false;
+    private Vector3 originalSelectionPos;
+    private BoxCollider2D selectionCollider;
+
+    private List<GameObject> selectedUnits;
+
+    private void Awake()
+    {
+        selectedUnits = new List<GameObject>();
+    }
     private float timeUntilNextWave;
     private float startTimeUntilWave = 60;
     public TMP_Text TimeUntilNextWaveText;
@@ -44,6 +55,8 @@ public class GameManager : MonoBehaviour
     {
         ressourceManager = RessourceManagerObject?.GetComponent<RessourceManager>();
         buildingsManager = BuildingsManagerObject?.GetComponent<BuildingsManager>();
+
+        selectionCollider = SelectionMarker.GetComponent<BoxCollider2D>();
 
         mainBuilding = Instantiate(MainBuildingPrefab, new Vector3(0, 0, -1), Quaternion.identity);
         mainBuilding.GetComponent<MainBuilding>().SetValues(Team.Team1, Color.magenta, 20);
@@ -340,40 +353,152 @@ public class GameManager : MonoBehaviour
 
     private void CheckUnitSelection()
     {
-        if (buildingsManager.IsInBuildMode() || !Input.GetMouseButtonDown(0)) return;
+        if (buildingsManager.IsInBuildMode())
+        {
+            if (isSelectionMode) EndMultiSelect();
+            return;
+        }
 
+        var mouse0click = Input.GetMouseButtonDown(0);
+        var mouse0hold = Input.GetMouseButton(0);
+        var mouse0up = Input.GetMouseButtonUp(0);
+
+        if (!mouse0hold && Input.GetMouseButtonDown(1) && !isSelectionMode)
+        {
+            SendSelectedUnitTo(GetMouseToWorldPos());
+            return;
+        }
+
+        if ((mouse0hold && !mouse0click) || isSelectionMode)
+        {
+            if(!isSelectionMode)
+            {
+                StartMultiSelect();
+                return;
+            }
+
+            if (mouse0hold)
+            {
+                ContinueMultiSelect();
+                return;
+            }
+
+            if (mouse0up)
+            {
+                EndMultiSelect();
+                return;
+            }
+        }
+    }
+
+    private void StartMultiSelect()
+    {
+        SelectionMarker.SetActive(true);
         var pos = (Vector3)GetMouseToWorldPos();
 
+        var renderer= SelectionMarker.GetComponent<LineRenderer>();
+        renderer.positionCount = 4;
+        renderer.SetPositions(new Vector3[] { pos, pos, pos, pos });
+
+        selectionCollider.size = new Vector2(0, 0);
+
+        originalSelectionPos = pos;
+        isSelectionMode = true;
+    }
+
+    private void ContinueMultiSelect()
+    {
+        var pos = (Vector3)GetMouseToWorldPos();
+
+        var renderer = SelectionMarker.GetComponent<LineRenderer>();
+
+        renderer.SetPosition(0, originalSelectionPos);
+        renderer.SetPosition(1, new Vector3(originalSelectionPos.x, pos.y));
+        renderer.SetPosition(2, pos);
+        renderer.SetPosition(3, new Vector3(pos.x, originalSelectionPos.y));
+
+        SelectionMarker.transform.position = (pos + originalSelectionPos) / 2;
+
+        selectionCollider.size = new Vector2(
+            Math.Abs(originalSelectionPos.x - pos.x),
+            Math.Abs(originalSelectionPos.y - pos.y));
+    }
+
+    private void EndMultiSelect()
+    {
+        Deselect();
+        var colliders = new Collider2D[Team1BattleUnits.Count + Team2BattleUnits.Count + Team3BattleUnits.Count + Team4BattleUnits.Count];
+        selectionCollider.OverlapCollider(new ContactFilter2D(), colliders);
+
+        var realColliders = colliders.Where(x => x != null && x.gameObject != null
+                                                && x.gameObject.GetComponent<BattleUnit>() != null
+                                                && x.gameObject.GetComponent<BattleUnit>().Team == Team.Team1)
+                                    .Select(x => x.gameObject).ToList();
+        var currentUnit = GetUnitOnCurrentMouse();
+        if (currentUnit != null) realColliders.Add(currentUnit);
+
+        foreach (var rc in realColliders)
+        {
+            rc.GetComponent<BattleUnit>().ToggleHighlight();
+            selectedUnits.Add(rc.gameObject);
+        }
+
+        isSelectionMode = false;
+        SelectionMarker.GetComponent<LineRenderer>().positionCount = 0;
+    }
+
+    private void Deselect()
+    {
+        foreach (var unit in selectedUnits)
+        {
+            unit.GetComponent<BattleUnit>().ToggleHighlight();
+        }
+
+        selectedUnits = new List<GameObject>();
+    }
+
+    private GameObject GetUnitOnCurrentMouse()
+    {
+        var pos = (Vector3)GetMouseToWorldPos();
         var hitData = Physics2D.Raycast(pos, Vector2.zero);
 
         if (hitData.transform == null)
         {
-            if (selectedUnit != null)
-            {
-                selectedUnit.GetComponent<BattleUnit>().SetDestination(pos);
-                selectedUnit.GetComponent<BattleUnit>().ToggleHighlight();
-                selectedUnit = null;
-            }
-
-            return;
+            return null;
         }
         GameObject hitObject = hitData.transform.gameObject;
 
-        if (selectedUnit != null)
-        {
-            selectedUnit.GetComponent<BattleUnit>().ToggleHighlight();
-            selectedUnit = null;
-        }
+        Deselect();
 
         var battleUnit = hitObject.GetComponent<BattleUnit>();
         if (battleUnit == null)
         {
-            return;
+            return null;
         }
 
-        selectedUnit = hitObject;
-        battleUnit.ToggleHighlight();
+        return hitObject;
+    }
 
-        return;
+    private void SendSelectedUnitTo(Vector3 pos)
+    {
+        if (selectedUnits.Count == 0) return;
+        var averagePos = GetAvaerageSelectedPoint();
+        var movement = pos - averagePos;
+        foreach(var unit in selectedUnits)
+        {
+            unit.GetComponent<BattleUnit>().SetDestination(unit.transform.position + movement);
+        }
+    }
+
+    private Vector3 GetAvaerageSelectedPoint()
+    {
+        var x = 0f;
+        var y = 0f;
+        foreach(var unit in selectedUnits)
+        {
+            x += unit.transform.position.x;
+            y += unit.transform.position.y;
+        }
+        return new Vector3((Int32)x / selectedUnits.Count, (Int32)y / selectedUnits.Count);
     }
 }
