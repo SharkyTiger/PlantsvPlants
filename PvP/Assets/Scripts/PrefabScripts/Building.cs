@@ -8,6 +8,7 @@ public class Building : DamageableBuilding
 {
     // Start is called before the first frame update
     public Int32 Cooldown;
+    public Int32 MaxCooldown;
     public BuildingKind Kind;
     public Team TeamNumber;
     public Color TeamColor;
