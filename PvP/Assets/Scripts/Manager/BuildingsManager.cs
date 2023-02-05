@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Tilemaps;
 
 public class BuildingsManager : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class BuildingsManager : MonoBehaviour
     public GameObject FertilizerMinePrefab;
     public GameObject SpawnerPrefab;
     public GameObject highlightPrefab;
+    public GameObject WaterLayer;
+    public GameObject DirtLayer;
 
     private GameObject highlight;
     public GameObject GameManagerObject;
@@ -59,18 +62,28 @@ public class BuildingsManager : MonoBehaviour
         }
 
         GameObject building = null;
-
+        var pos = new Vector2(cellPosition.x, cellPosition.y);
         switch (toBeBuild)
         {
             case BuildingKind.Spawner:
-                building = Instantiate(SpawnerPrefab, cellPosition, Quaternion.identity);
-                building.GetComponent<Spawner>().Id = gameManager.GetNextSpawnerId();
+                if(!(DirtLayer.GetComponent<TilemapCollider2D>().OverlapPoint(pos) 
+                  || WaterLayer.GetComponent<TilemapCollider2D>().OverlapPoint(pos)))
+                {
+                    building = Instantiate(SpawnerPrefab, cellPosition, Quaternion.identity);
+                    building.GetComponent<Spawner>().Id = gameManager.GetNextSpawnerId();
+                }
                 break;
             case BuildingKind.WaterMine:
-                building = Instantiate(WaterMinePrefab, cellPosition, Quaternion.identity);
+                if(WaterLayer.GetComponent<TilemapCollider2D>().OverlapPoint(pos))
+                {
+                    Debug.Log("C");
+                    building = Instantiate(WaterMinePrefab, cellPosition, Quaternion.identity);
+                    Debug.Log("B");
+                }
+                Debug.Log("A");
                 break;
             case BuildingKind.FertilizerMine:
-                building = Instantiate(FertilizerMinePrefab, cellPosition, Quaternion.identity);
+                if(DirtLayer.GetComponent<TilemapCollider2D>().OverlapPoint(pos))  building = Instantiate(FertilizerMinePrefab, cellPosition, Quaternion.identity);
                 break;
         }
 

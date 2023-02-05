@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
     public GameObject GetGameObjectFromPosition(Vector3 position)
     {
         var hitData = Physics2D.Raycast(position, Vector2.zero);
-        if (hitData.collider == null)
+        if (hitData.collider == null || hitData.collider.gameObject.tag.ToLower().Equals("obstacle"))
         {
             return null;
         }
