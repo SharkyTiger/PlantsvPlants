@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
         mainBuilding.GetComponent<MainBuilding>().SetValues(Team.Team1, Color.magenta, 20);
         timeUntilNextWave = startTimeUntilWave;
         //Secret "Boss" Unit
-        SpawnBattleUnit(new Vector3(113, -88, -1), Team.Team2, Color.blue, -1, new Vector3(113, -88, -1));
+        SpawnBossUnit(new Vector3(113, -88, -1), Team.Team2, Color.black, -1, new Vector3(113, -88, -1));
     }
 
     // Update is called once per frame
@@ -209,6 +209,33 @@ public class GameManager : MonoBehaviour
         var unit = Instantiate(BattleunitPrefab, position, Quaternion.identity);
         var script = unit.GetComponent<BattleUnit>();
         script.Spawn(team, color, 5, 1, 1f, spawnerId);
+        if (position != moveToPosition)
+        {
+            script.SetDestination(moveToPosition);
+        }
+        script.DestroyedEvent += RemoveBattleUnitOnDestroy;
+        switch (team)
+        {
+            case Team.Team1:
+                Team1BattleUnits.Add(unit);
+                break;
+            case Team.Team2:
+                Team2BattleUnits.Add(unit);
+                break;
+            case Team.Team3:
+                Team3BattleUnits.Add(unit);
+                break;
+            case Team.Team4:
+                Team4BattleUnits.Add(unit);
+                break;
+        }
+    }
+
+    public void SpawnBossUnit(Vector3 position, Team team, Color color, Int32 spawnerId, Vector3 moveToPosition)
+    {
+        var unit = Instantiate(BattleunitPrefab, position, Quaternion.identity);
+        var script = unit.GetComponent<BattleUnit>();
+        script.Spawn(team, color, 20, 2, 1f, spawnerId);
         if (position != moveToPosition)
         {
             script.SetDestination(moveToPosition);
