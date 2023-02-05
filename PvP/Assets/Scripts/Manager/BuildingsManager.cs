@@ -42,7 +42,7 @@ public class BuildingsManager : MonoBehaviour
 
     public Boolean IsInBuildMode() => toBeBuild != BuildingKind.None;
 
-    private void Cancel()
+    public void Cancel()
     {
         highlight.SetActive(false);
         toBeBuild = BuildingKind.None;
