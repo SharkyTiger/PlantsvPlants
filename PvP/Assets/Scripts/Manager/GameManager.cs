@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     private Int32[] WaterMineCost = { 100, 0 };
     private Int32[] FertilizerMineCost = { 0, 100 };
     private Int32 currentSpawnerId = -1;
-    private Vector3[] spawnPositions = { new Vector3(30, 30, -1), new Vector3(30, -30, -1), new Vector3(-30, 30, -1), new Vector3(-30, -30, -1) };
+    private Vector3[] spawnPositions = { new Vector3(-97, 76, -1), new Vector3(113, -76, -1), new Vector3(-97, -88, -1), new Vector3(113, -88, -1) };
     private Int32 survivedWaves = 0;
     private Boolean isSelectionMode = false;
     private Vector3 originalSelectionPos;
@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
         timeUntilNextWave = startTimeUntilWave;
         //Testcode
         //SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red, -1, new Vector3(-10, 0, -1));
-        SpawnBattleUnit(new Vector3(12, -5, -1), Team.Team2, Color.blue, -1, new Vector3(12, -5, -1));
+        SpawnBattleUnit(new Vector3(113, -88, -1), Team.Team2, Color.blue, -1, new Vector3(113, -88, -1));
     }
 
     // Update is called once per frame
