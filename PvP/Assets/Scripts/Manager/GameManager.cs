@@ -61,8 +61,7 @@ public class GameManager : MonoBehaviour
         mainBuilding = Instantiate(MainBuildingPrefab, new Vector3(0, 0, -1), Quaternion.identity);
         mainBuilding.GetComponent<MainBuilding>().SetValues(Team.Team1, Color.magenta, 20);
         timeUntilNextWave = startTimeUntilWave;
-        //Testcode
-        //SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red, -1, new Vector3(-10, 0, -1));
+        //Secret "Boss" Unit
         SpawnBattleUnit(new Vector3(113, -88, -1), Team.Team2, Color.blue, -1, new Vector3(113, -88, -1));
     }
 
@@ -72,10 +71,6 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SceneManager.LoadScene("MainMenu");
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            SpawnEnemyWave(10, 1);
         }
         if (timeUntilNextWave <= 0f)
         {
