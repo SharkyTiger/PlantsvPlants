@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 1012868233
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 846402332, guid: d65e1788665eebd43818237250c6f948, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4c9f51084d1d0422e9d48850fcd358f3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -103,7 +103,8 @@ MonoBehaviour:
   CurrentHealth: 0
   MaxHealth: 100
   Team: 0
-  Cooldown: 2000
+  Cooldown: 200
+  MaxCooldown: 200
   Kind: 1
   TeamNumber: 0
   TeamColor: {r: 0, g: 0, b: 0, a: 0}
@@ -160,7 +161,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.4, y: 0.4}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

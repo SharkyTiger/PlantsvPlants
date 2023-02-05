@@ -2,7 +2,6 @@ using System;
 
 public class Spawner : Building
 {
-    Int32 Tick;
     public Int32 Id;
     public Spawner(BuildingKind kind) : base(kind)
     {
@@ -11,20 +10,19 @@ public class Spawner : Building
     // Start is called before the first frame update
     void Start()
     {
-        Tick = 0;
+        MaxCooldown = Cooldown;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        Tick++;
-        Tick %= Cooldown;
-        if (Tick == 0)
+        Cooldown--;
+        if (Cooldown <= 0)
         {
             var test = this.transform.position;
             test.x -= 2;
             test.z = -1;
             Manager.SpawnBattleUnit(test, TeamNumber, TeamColor, Id, test);
+            Cooldown = MaxCooldown;
         }
     }
 }
