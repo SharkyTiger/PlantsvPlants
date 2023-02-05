@@ -55,6 +55,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FertilizerMine
       objectReference: {fileID: 0}
+    - target: {fileID: 3692735732445467768, guid: 32cc0c48e2201cb44aae527d6ee41da4, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 647167721, guid: d65e1788665eebd43818237250c6f948, type: 3}
     - target: {fileID: 7681039697093696378, guid: 32cc0c48e2201cb44aae527d6ee41da4, type: 3}
       propertyPath: Kind
       value: 3

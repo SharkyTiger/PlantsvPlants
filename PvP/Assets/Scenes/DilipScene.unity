@@ -360,6 +360,14 @@ PrefabInstance:
       propertyPath: m_text
       value: 'W : 100'
       objectReference: {fileID: 0}
+    - target: {fileID: 4769222180302769946, guid: 136df0449b0d54535b0597b3a1c23488, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4769222180302769946, guid: 136df0449b0d54535b0597b3a1c23488, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 846402332, guid: d65e1788665eebd43818237250c6f948, type: 3}
     - target: {fileID: 4769222180302769947, guid: 136df0449b0d54535b0597b3a1c23488, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -749,6 +757,14 @@ PrefabInstance:
       propertyPath: m_text
       value: 'W : 100'
       objectReference: {fileID: 0}
+    - target: {fileID: 4769222180302769946, guid: 136df0449b0d54535b0597b3a1c23488, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4769222180302769946, guid: 136df0449b0d54535b0597b3a1c23488, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1434120193, guid: d65e1788665eebd43818237250c6f948, type: 3}
     - target: {fileID: 4769222180302769947, guid: 136df0449b0d54535b0597b3a1c23488, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -1572,6 +1588,14 @@ PrefabInstance:
       propertyPath: m_text
       value: 'W : 000'
       objectReference: {fileID: 0}
+    - target: {fileID: 4769222180302769946, guid: 136df0449b0d54535b0597b3a1c23488, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4769222180302769946, guid: 136df0449b0d54535b0597b3a1c23488, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 647167721, guid: d65e1788665eebd43818237250c6f948, type: 3}
     - target: {fileID: 4769222180302769947, guid: 136df0449b0d54535b0597b3a1c23488, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -2323,6 +2347,7 @@ MonoBehaviour:
   RessourceManagerObject: {fileID: 1162750747}
   MainBuildingPrefab: {fileID: 4586210466337702991, guid: 6247f0091efdec044833fd87b9e9345b, type: 3}
   map: {fileID: 721221313}
+  TimeUntilNextWaveText: {fileID: 0}
 --- !u!1 &2006135376
 GameObject:
   m_ObjectHideFlags: 0
