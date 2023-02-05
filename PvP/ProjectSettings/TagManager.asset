@@ -9,6 +9,7 @@ TagManager:
   - Destructable
   - UIManager
   - RessourceManager
+  - IgnoreByRaycast
   layers:
   - Default
   - TransparentFX

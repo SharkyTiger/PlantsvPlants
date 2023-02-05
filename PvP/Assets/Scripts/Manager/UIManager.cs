@@ -9,8 +9,7 @@ public class UIManager : MonoBehaviour
     public GameObject ClosedShopParent;
     public GameObject OpenShopParent;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         SetCountTexts(0, 0);
     }

@@ -84,6 +84,7 @@ public class BuildingsManager : MonoBehaviour
             b.MaxHealth = b.CurrentHealth = 10;
             gameManager.CreateBuilding(building);
             toBeBuild = BuildingKind.None;
+            highlight.SetActive(false);
         }
     }
 }

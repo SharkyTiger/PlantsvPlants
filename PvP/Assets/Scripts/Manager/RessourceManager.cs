@@ -23,7 +23,8 @@ public class RessourceManager : MonoBehaviour
     {
         waterCount = StartWater;
         fertilizerCount = StartFertilizer;
-        UIManagerObject = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>();
+        UIManagerObject = GameObject.FindGameObjectWithTag("UIManager")?.GetComponent<UIManager>();
+        if (UIManagerObject == null) UIManagerObject = gameObject.GetComponent<UIManager>();
         fixedTicks = 0;
 
         UpdateRessourceUI();
