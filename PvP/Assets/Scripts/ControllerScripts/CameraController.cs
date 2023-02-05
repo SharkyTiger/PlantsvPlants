@@ -18,8 +18,18 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         var vec = new Vector3(Input.GetAxis(horizontal), Input.GetAxis(vertical));
+        var originalPos = this.transform.position;
         this.transform.Translate(vec * speed);
-        if(Input.GetKeyDown(KeyCode.Backspace))
+        if (this.transform.position.x > 113
+            || this.transform.position.x < -97
+            || this.transform.position.y > 76
+            || this.transform.position.y < -88)
+        {
+            this.transform.position = originalPos;
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
         {
             transform.position = originalPos;
         }

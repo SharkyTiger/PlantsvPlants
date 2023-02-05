@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Tilemaps;
 using System.Linq;
-using UnityEngine.SceneManagement;
+using TMPro;
 using Unity.VisualScripting;
-using Random = UnityEngine.Random;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,15 +28,15 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> buildings = new List<GameObject>();
 
-    private Int32[] SpawnerCost = {100,100};
-    private Int32[] WaterMineCost = {100,0};
-    private Int32[] FertilizerMineCost = {0,100};
+    private Int32[] SpawnerCost = { 100, 100 };
+    private Int32[] WaterMineCost = { 100, 0 };
+    private Int32[] FertilizerMineCost = { 0, 100 };
     private Int32 currentSpawnerId = -1;
-    private Vector3[] spawnPositions = {new Vector3(30,30,-1), new Vector3(30, -30, -1), new Vector3(-30, 30, -1), new Vector3(-30, -30, -1) };
+    private Vector3[] spawnPositions = { new Vector3(30, 30, -1), new Vector3(30, -30, -1), new Vector3(-30, 30, -1), new Vector3(-30, -30, -1) };
     private Int32 survivedWaves = 0;
     private float timeUntilNextWave;
     private float startTimeUntilWave = 60;
-    public Text TimeUntilNextWaveText;
+    public TMP_Text TimeUntilNextWaveText;
     private GameObject selectedUnit;
 
     // Start is called before the first frame update
@@ -65,7 +66,7 @@ public class GameManager : MonoBehaviour
         }
         if (timeUntilNextWave <= 0f)
         {
-            SpawnEnemyWave(10 * (survivedWaves+1), Math.Min(Math.Min(survivedWaves / 4, 1), 4));
+            SpawnEnemyWave(10 * (survivedWaves + 1), Math.Min(Math.Min(survivedWaves / 4, 1), 4));
             timeUntilNextWave = startTimeUntilWave;
         }
         ShootBulletsTeam1();
@@ -85,10 +86,10 @@ public class GameManager : MonoBehaviour
 
     public void SpawnEnemyWave(Int32 numberOfEnemies, Int32 numberOfCorners = 1)
     {
-        for(var i = 0; i < numberOfEnemies; i++)
+        for (var i = 0; i < numberOfEnemies; i++)
         {
             var selectedPostion = Random.Range(1, numberOfCorners);
-            SpawnBattleUnit(spawnPositions[selectedPostion-1], Team.Team2, Color.blue, -1, mainBuilding.transform.position);
+            SpawnBattleUnit(spawnPositions[selectedPostion - 1], Team.Team2, Color.blue, -1, mainBuilding.transform.position);
         }
     }
 
@@ -143,7 +144,7 @@ public class GameManager : MonoBehaviour
 
     public void DestroyBuilding(BuildingKind buildingKind, GameObject building)
     {
-        if(buildings.Contains(building))
+        if (buildings.Contains(building))
         {
             switch (buildingKind)
             {
@@ -155,9 +156,9 @@ public class GameManager : MonoBehaviour
                     break;
                 case BuildingKind.Spawner:
                     var spawnerId = building.GetComponent<Spawner>().Id;
-                    foreach(var unit in Team1BattleUnits)
+                    foreach (var unit in Team1BattleUnits)
                     {
-                        if(unit.GetComponent<BattleUnit>().SpawnerBuildingId == spawnerId)
+                        if (unit.GetComponent<BattleUnit>().SpawnerBuildingId == spawnerId)
                         {
                             Destroy(unit);
                         }
@@ -200,7 +201,7 @@ public class GameManager : MonoBehaviour
         var unit = Instantiate(BattleunitPrefab, position, Quaternion.identity);
         var script = unit.GetComponent<BattleUnit>();
         script.Spawn(team, color, 5, 1, 1f, spawnerId);
-        if(position != moveToPosition)
+        if (position != moveToPosition)
         {
             script.SetDestination(moveToPosition);
         }
@@ -285,7 +286,7 @@ public class GameManager : MonoBehaviour
                     break;
                 }
             }
-            
+
             if (!mainBuilding.IsUnityNull() && triggerDistance >= Vector3.Distance(unit.transform.position, mainBuilding.transform.position))
             {
                 unit.GetComponent<BattleUnit>()?.ShootBullet(mainBuilding.transform);
@@ -307,7 +308,7 @@ public class GameManager : MonoBehaviour
 
     public void RemoveBuildingsOnDestruction(object sender, Building.DestructionEventArgs args)
     {
-        if(args.Team == Team.Team1)
+        if (args.Team == Team.Team1)
         {
             DestroyBuilding(args.BuildingKind, args.Building);
         }
@@ -347,7 +348,7 @@ public class GameManager : MonoBehaviour
 
         if (hitData.transform == null)
         {
-            if(selectedUnit != null)
+            if (selectedUnit != null)
             {
                 selectedUnit.GetComponent<BattleUnit>().SetDestination(pos);
                 selectedUnit.GetComponent<BattleUnit>().ToggleHighlight();
@@ -365,7 +366,7 @@ public class GameManager : MonoBehaviour
         }
 
         var battleUnit = hitObject.GetComponent<BattleUnit>();
-        if ( battleUnit == null)
+        if (battleUnit == null)
         {
             return;
         }

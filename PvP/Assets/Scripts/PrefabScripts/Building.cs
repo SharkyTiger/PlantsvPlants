@@ -4,8 +4,6 @@ using Unity.VisualScripting;
 
 using UnityEngine;
 
-using static BattleUnit;
-
 public class Building : DamageableBuilding
 {
     // Start is called before the first frame update
@@ -18,13 +16,13 @@ public class Building : DamageableBuilding
 
     public Building(BuildingKind kind)
     {
-        Kind = kind; 
+        Kind = kind;
         Team = Team.Team1;
     }
 
     protected override void OnBeforeDestruction()
     {
-        
+
     }
 
     private void OnDestroy()

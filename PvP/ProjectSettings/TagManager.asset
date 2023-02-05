@@ -10,6 +10,7 @@ TagManager:
   - UIManager
   - RessourceManager
   - IgnoreByRaycast
+  - Border
   layers:
   - Default
   - TransparentFX

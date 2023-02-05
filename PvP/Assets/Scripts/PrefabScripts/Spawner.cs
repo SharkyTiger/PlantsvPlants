@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 public class Spawner : Building
 {
@@ -20,10 +19,10 @@ public class Spawner : Building
     {
         Tick++;
         Tick %= Cooldown;
-        if (Tick == 0) 
+        if (Tick == 0)
         {
             var test = this.transform.position;
-            test.x -=  2;
+            test.x -= 2;
             test.z = -1;
             Manager.SpawnBattleUnit(test, TeamNumber, TeamColor, Id, test);
         }
