@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
     private void FixedUpdate()
     {
         timeUntilNextWave -= Time.deltaTime;
-        //TimeUntilNextWaveText.text = timeUntilNextWave.ToString("ss");
+        TimeUntilNextWaveText.text = $"{timeUntilNextWave:0}";
     }
 
     public void SpawnEnemyWave(Int32 numberOfEnemies, Int32 numberOfCorners = 1)
