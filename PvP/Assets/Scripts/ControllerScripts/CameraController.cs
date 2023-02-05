@@ -17,6 +17,11 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            transform.position = this.originalPos;
+        }
+
         var vec = new Vector3(Input.GetAxis(horizontal), Input.GetAxis(vertical));
         var originalPos = this.transform.position;
         this.transform.Translate(vec * speed);
@@ -27,11 +32,6 @@ public class CameraController : MonoBehaviour
         {
             this.transform.position = originalPos;
             return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            transform.position = originalPos;
         }
     }
 }

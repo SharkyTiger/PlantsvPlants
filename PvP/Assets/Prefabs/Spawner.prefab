@@ -103,7 +103,7 @@ MonoBehaviour:
   CurrentHealth: 0
   MaxHealth: 100
   Team: 0
-  Cooldown: 1000
+  Cooldown: 2000
   Kind: 1
   TeamNumber: 0
   TeamColor: {r: 0, g: 0, b: 0, a: 0}
