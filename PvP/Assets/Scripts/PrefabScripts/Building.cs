@@ -1,5 +1,7 @@
 using System;
 
+using Unity.VisualScripting;
+
 using UnityEngine;
 
 using static BattleUnit;
@@ -27,6 +29,10 @@ public class Building : DamageableBuilding
 
     private void OnDestroy()
     {
+        if (this.IsUnityNull())
+        {
+            return;
+        }
         DestroyedEvent.Invoke(this, new DestructionEventArgs(Team, Kind, this.gameObject));
     }
 

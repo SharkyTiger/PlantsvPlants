@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using Random = UnityEngine.Random;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,7 +33,9 @@ public class GameManager : MonoBehaviour
     private Int32 currentSpawnerId = -1;
     private Vector3[] spawnPositions = {new Vector3(30,30,-1), new Vector3(30, -30, -1), new Vector3(-30, 30, -1), new Vector3(-30, -30, -1) };
     private Int32 survivedWaves = 0;
-    private TimeSpan timeUntilNextWave; 
+    private float timeUntilNextWave;
+    private float startTimeUntilWave = 60;
+    public Text TimeUntilNextWaveText;
     private GameObject selectedUnit;
 
     // Start is called before the first frame update
@@ -41,12 +44,12 @@ public class GameManager : MonoBehaviour
         ressourceManager = RessourceManagerObject?.GetComponent<RessourceManager>();
         buildingsManager = BuildingsManagerObject?.GetComponent<BuildingsManager>();
 
-        mainBuilding = Instantiate(MainBuildingPrefab, new Vector3(-2, 0, -1), Quaternion.identity);
+        mainBuilding = Instantiate(MainBuildingPrefab, new Vector3(0, 0, -1), Quaternion.identity);
         mainBuilding.GetComponent<MainBuilding>().SetValues(Team.Team1, Color.magenta, 20);
-        timeUntilNextWave = new TimeSpan(100);
+        timeUntilNextWave = startTimeUntilWave;
         //Testcode
         SpawnBattleUnit(new Vector3(-10, 0, -1), Team.Team1, Color.red, -1, new Vector3(-10, 0, -1));
-        SpawnBattleUnit(new Vector3(10, -5, -1), Team.Team2, Color.blue, -1, new Vector3(10, -5, -1));
+        SpawnBattleUnit(new Vector3(12, -5, -1), Team.Team2, Color.blue, -1, new Vector3(12, -5, -1));
     }
 
     // Update is called once per frame
@@ -60,9 +63,10 @@ public class GameManager : MonoBehaviour
         {
             SpawnEnemyWave(10, 1);
         }
-        if (timeUntilNextWave == TimeSpan.Zero)
+        if (timeUntilNextWave <= 0f)
         {
-            SpawnEnemyWave(10 * survivedWaves+1, Math.Max(Math.Min(survivedWaves / 4, 1), 4));
+            SpawnEnemyWave(10 * (survivedWaves+1), Math.Min(Math.Min(survivedWaves / 4, 1), 4));
+            timeUntilNextWave = startTimeUntilWave;
         }
         ShootBulletsTeam1();
         ShootBulletsTeam2();
@@ -71,6 +75,12 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene("VictoryScene");
         }
         CheckUnitSelection();
+    }
+
+    private void FixedUpdate()
+    {
+        timeUntilNextWave -= Time.deltaTime;
+        //TimeUntilNextWaveText.text = timeUntilNextWave.ToString("ss");
     }
 
     public void SpawnEnemyWave(Int32 numberOfEnemies, Int32 numberOfCorners = 1)
@@ -319,6 +329,11 @@ public class GameManager : MonoBehaviour
             case Team.Team4:
                 Team4BattleUnits.Remove(args.BattleUnit);
                 break;
+        }
+
+        if (args.Team != Team.Team1 && (Team2BattleUnits.Count + Team3BattleUnits.Count + Team4BattleUnits.Count <= 1))
+        {
+            survivedWaves += 1;
         }
     }
 

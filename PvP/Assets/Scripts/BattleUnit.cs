@@ -100,6 +100,10 @@ public class BattleUnit : MonoBehaviour
 
     private void OnDestroy()
     {
+        if(this.IsUnityNull())
+        {
+            return;
+        }
         DestroyedEvent.Invoke(this, new DeathEventArgs(Team, this.gameObject));
     }
 
