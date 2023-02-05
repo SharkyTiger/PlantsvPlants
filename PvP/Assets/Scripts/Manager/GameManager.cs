@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     private Int32[] WaterMineCost = { 100, 0 };
     private Int32[] FertilizerMineCost = { 0, 100 };
     private Int32 currentSpawnerId = -1;
-    private Vector3[] spawnPositions = { new Vector3(-97, 76, -1), new Vector3(113, -76, -1), new Vector3(-97, -88, -1), new Vector3(113, -88, -1) };
+    private Vector3[] spawnPositions = { new Vector3(-95, 70, -1), new Vector3(110, 70, -1), new Vector3(-95, -85, -1), new Vector3(110, -85, -1) };
     private Int32 survivedWaves = 0;
     private Boolean isSelectionMode = false;
     private Vector3 originalSelectionPos;
