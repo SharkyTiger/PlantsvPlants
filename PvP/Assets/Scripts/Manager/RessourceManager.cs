@@ -33,7 +33,7 @@ public class RessourceManager : MonoBehaviour
     private void FixedUpdate()
     {
         fixedTicks++;
-        if(fixedTicks % 250 == 0)
+        if (fixedTicks % 250 == 0)
         {
             fixedTicks = 0;
             AddRessourcesFromBuilding();

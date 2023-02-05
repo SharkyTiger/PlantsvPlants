@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Tilemaps;
 
 public class BuildingsManager : MonoBehaviour
 {
@@ -51,7 +50,7 @@ public class BuildingsManager : MonoBehaviour
 
     private void MouseDown(Vector3Int cellPosition)
     {
-        if ( EventSystem.current.IsPointerOverGameObject()) return;
+        if (EventSystem.current.IsPointerOverGameObject()) return;
 
         var currentObject = gameManager.GetGameObjectFromPosition(cellPosition);
         if (currentObject != null)
@@ -61,7 +60,7 @@ public class BuildingsManager : MonoBehaviour
 
         GameObject building = null;
 
-        switch(toBeBuild)
+        switch (toBeBuild)
         {
             case BuildingKind.Spawner:
                 building = Instantiate(SpawnerPrefab, cellPosition, Quaternion.identity);
@@ -75,7 +74,7 @@ public class BuildingsManager : MonoBehaviour
                 break;
         }
 
-        if(building != null)
+        if (building != null)
         {
             var b = building.GetComponent<Building>();
             b.Manager = gameManager;

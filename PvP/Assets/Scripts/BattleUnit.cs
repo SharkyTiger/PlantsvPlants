@@ -61,7 +61,7 @@ public class BattleUnit : MonoBehaviour
         if (shotBullet)
         {
             Cooldown--;
-            if(Cooldown <= 0)
+            if (Cooldown <= 0)
             {
                 shotBullet = false;
                 Cooldown = MaxCooldown;
@@ -71,7 +71,7 @@ public class BattleUnit : MonoBehaviour
     void Update()
     {
         if (!onMove) return;
-        
+
         Vector3 pos = transform.position;
         Vector3 direction = currentDestination - transform.position;
 
@@ -100,7 +100,7 @@ public class BattleUnit : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(this.IsUnityNull())
+        if (this.IsUnityNull())
         {
             return;
         }
@@ -111,16 +111,17 @@ public class BattleUnit : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Damage") && collision.gameObject.GetComponent<Bullet>()?.Team != Team)
         {
-            CurrentHealth-= collision.gameObject.GetComponent<Bullet>().DamageValue;
+            CurrentHealth -= collision.gameObject.GetComponent<Bullet>().DamageValue;
             Destroy(collision.gameObject);
-            if(CurrentHealth <= 0)
+            if (CurrentHealth <= 0)
             {
                 Destroy(gameObject);
             }
         }
     }
 
-    public class DeathEventArgs : EventArgs {
+    public class DeathEventArgs : EventArgs
+    {
         public Team Team;
         public GameObject BattleUnit;
 
