@@ -75,7 +75,7 @@ public class BattleUnit : MonoBehaviour
         Vector3 pos = transform.position;
         Vector3 direction = currentDestination - transform.position;
 
-        if (direction.magnitude < 1)
+        if (direction.magnitude < 0.1f)
         {
             onMove = false;
             return;
